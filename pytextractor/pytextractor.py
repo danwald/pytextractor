@@ -1,5 +1,4 @@
 # import the necessary packages
-import argparse
 import time
 
 import cv2
@@ -8,58 +7,52 @@ import pytesseract
 from imutils.object_detection import non_max_suppression
 
 
-class PyTextractor(object):
+class PyTextractor:
+    layer_names = ("feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3",)
+
     def __init__(self, *args, **kwargs):
         self.east = kwargs.get('east', './assets/models/frozen_east_text_detection.pb')
-        self.confidence = kwargs.get('confidence', 0.5)
-        self.width = kwargs.get('width', 320)
-        self.height = kwargs.get('height', 320)
-        self.display = kwargs.get('display', False)
-        self.numbers = kwargs.get('numbers', False)
-        self.box_percentage = kwargs.get('box_percentage', 2.0)
-        self.layer_names = ("feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3",)
         self._load_assets()
 
     def get_image_text(self,
                        image,
-                       width=self.width,
-                       height.self.height,
-                       display=self.display,
-                       numbers=self.numbers,
-                       confidence=self.confidence,
-                       percent=self.box_percent):
-        loaded_image = self._load_image(image):
-        resize_image, resize_width, resize_height, ratio_width, ratio_height =
-            self.resize_image(loaded_image)
-                # grab the number of rows and columns from the scores volume, then
-        # initialize our set of bounding box rectangles and corresponding
-        # confidence scores
-        scores, geometry = self._compute_scores_geometry(resize_image, resize_width, resize_height)
+                       width=320,
+                       height=320,
+                       display=False,
+                       numbers=False,
+                       confidence=0.5,
+                       percentage=2.0,
+                       **kwargs):
+        loaded_image = self._load_image(image)
+        image, width, height, ratio_width, ratio_height = self._resize_image(
+            loaded_image, width, height
+        )
+        scores, geometry = self._compute_scores_geometry(image, width, height)
         (numRows, numCols) = scores.shape[2:4]
 
         start = time.time()
-        boxes = get_boxes(numRows, numCols, confidence)
+        boxes = self._get_boxes(numRows, numCols, confidence, geometry, scores)
         end = time.time()
         print('Found {boxes} ROIs {seconds:.6f} seconds'.format(boxes=len(boxes),seconds=(end-start)))
 
         return self._extract_text(
-            loaded_image, boxes, box_percentage, display, numbers, ratio_width, ratio_height
+            loaded_image, boxes, percentage, display, numbers, ratio_width, ratio_height
         )
 
     def _load_image(self, image):
         return cv2.imread(image)
 
-    def _resize_image(image, width, height):
+    def _resize_image(self, image, width, height):
         (H, W) = image.shape[:2]
 
         (newW, newH) = (width, height)
-        rW = W / float(newW)
-        rH = H / float(newH)
+        ratio_width = W / float(newW)
+        ratio_height = H / float(newH)
 
         # resize the image and grab the new image dimensions
         resized_image = cv2.resize(image, (newW, newH))
-        (H, W) = resized.shape[:2]
-        return (resize_image, height, width, ratio_width, ratio_height)
+        (H, W) = resized_image.shape[:2]
+        return (resized_image, height, width, ratio_width, ratio_height)
 
     def _compute_scores_geometry(self, image, width, height):
         # construct a blob from the image and then perform a forward pass of
@@ -79,12 +72,12 @@ class PyTextractor(object):
 
     def _load_assets(self):
         start = time.time()
-        self.east_net = cv2.dnn.readNet(args["east"])
+        self.east_net = cv2.dnn.readNet(self.east)
         end = time.time()
         print("[INFO] Loaded EAST text detector {:.6f} seconds ...".format(end-start))
 
 
-    def _get_boxes(numRows, numCols, confidence, min_boxes=1, max_iterations=20):
+    def _get_boxes(self, numRows, numCols, confidence, geometry, scores, min_boxes=1, max_iterations=20):
         iterations = 0
         boxes = []
         rects = []
@@ -158,9 +151,9 @@ class PyTextractor(object):
 
             # draw the bounding box on the image
             if display:
-                cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
+                cv2.rectangle(image, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
-            ROIImage = orig.copy()[startY:endY, startX:endX]
+            ROIImage = image.copy()[startY:endY, startX:endX]
             config = '--psm 6' if numbers else ''
             extracted_text.append(pytesseract.image_to_string(
                 ROIImage, config=config)
@@ -170,7 +163,7 @@ class PyTextractor(object):
 
         # show the output image
         if display:
-            cv2.imshow("Text Detection", orig)
+            cv2.imshow("Text Detection", image)
             cv2.waitKey(0)
 
         return extracted_text
