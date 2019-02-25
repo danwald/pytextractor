@@ -16,42 +16,37 @@ class PyTextractor(object):
         self.height = kwargs.get('height', 320)
         self.display = kwargs.get('display', False)
         self.numbers = kwargs.get('numbers', False)
-        self.box_percentage = kwargs.get('box_percentage', 2)
-        self.layer_names = ("feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3")
+        self.box_percentage = kwargs.get('box_percentage', 2.0)
+        self.layer_names = ("feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3",)
         self._load_assets()
 
-    def get_image_text(image,
+    def get_image_text(self,
+                       image,
                        width=self.width,
                        height.self.height,
-                       display=self.display, numbers=self.numbers):
+                       display=self.display,
+                       numbers=self.numbers,
+                       confidence=self.confidence,
+                       percent=self.box_percent):
         loaded_image = self._load_image(image):
         resize_image, resize_width, resize_height, ratio_width, ratio_height =
             self.resize_image(loaded_image)
-                # construct a blob from the image and then perform a forward pass of
-        # the model to obtain the two output layer sets
-        blob = cv2.dnn.blobFromImage(image, 1.0, (W, H),
-            (123.68, 116.78, 103.94), swapRB=True, crop=False)
-        start = time.time()
-        self.net.setInput(blob)
-        (scores, geometry) = net.forward(self.layer_names)
-        end = time.time()
-
-        # show timing information on text prediction
-        print("[INFO] text detection took {:.6f} seconds".format(end - start))
-
-        # grab the number of rows and columns from the scores volume, then
+                # grab the number of rows and columns from the scores volume, then
         # initialize our set of bounding box rectangles and corresponding
         # confidence scores
+        scores, geometry = self._compute_scores_geometry(resize_image, resize_width, resize_height)
         (numRows, numCols) = scores.shape[2:4]
-        #import ipdb; ipdb.set_trace();
-        # loop over the number of rows
+
         start = time.time()
-        boxes = get_boxes(numRows, numCols, args['confidence'])
+        boxes = get_boxes(numRows, numCols, confidence)
         end = time.time()
-        # loop over the bounding boxes
         print('Found {boxes} ROIs {seconds:.6f} seconds'.format(boxes=len(boxes),seconds=(end-start)))
 
-    def _load_image(image):
+        return self._extract_text(
+            loaded_image, boxes, box_percentage, display, numbers, ratio_width, ratio_height
+        )
+
+    def _load_image(self, image):
         return cv2.imread(image)
 
     def _resize_image(image, width, height):
@@ -64,6 +59,21 @@ class PyTextractor(object):
         # resize the image and grab the new image dimensions
         resized_image = cv2.resize(image, (newW, newH))
         (H, W) = resized.shape[:2]
+        return (resize_image, height, width, ratio_width, ratio_height)
+
+    def _compute_scores_geometry(self, image, width, height):
+        # construct a blob from the image and then perform a forward pass of
+        # the model to obtain the two output layer sets
+        blob = cv2.dnn.blobFromImage(image, 1.0, (width, height),
+            (123.68, 116.78, 103.94), swapRB=True, crop=False)
+        start = time.time()
+        self.east_net.setInput(blob)
+        (scores, geometry) = self.east_net.forward(self.layer_names)
+        end = time.time()
+
+        # show timing information on text prediction
+        print("[INFO] text detection took {:.6f} seconds".format(end - start))
+        return (scores, geometry)
 
 
 
@@ -134,39 +144,33 @@ class PyTextractor(object):
                 print('Couldn\'t find at least {min_boxes} boxe(s), halving confidence to {confidence}'.
                       format(min_boxes=min_boxes, confidence=confidence))
 
-
-# loop over the bounding boxes
-print('Found {boxes} ROIs {seconds:.6f} seconds'.format(boxes=len(boxes),seconds=(end-start)))
-extracted_text=[]
-for (startX, startY, endX, endY) in boxes:
-    # scale the bounding box coordinates based on the respective
-    # ratios
-    percent = args['box_percentage']
-    percent = (percent/100+1) if percent >= 0 else ((100 - percent)/100)
-    startX = int(startX * rW * percent)
-    startY = int(startY * rH * percent)
-    endX = int(endX * rW * percent)
-    endY = int(endY * rH * percent)
+    def _extract_text(self, image, boxes, percent, display, numbers, ratio_width, ratio_height):
+        extracted_text=[]
+        for (startX, startY, endX, endY) in boxes:
+            # scale the bounding box coordinates based on the respective
+            # ratios
+            percent = (percent/100+1) if percent >= 0 else ((100 - percent)/100)
+            startX = int(startX * ratio_width * percent)
+            startY = int(startY * ratio_height * percent)
+            endX = int(endX * ratio_width * percent)
+            endY = int(endY * ratio_height * percent)
 
 
-    # draw the bounding box on the image
-    if args['display']:
-        cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
+            # draw the bounding box on the image
+            if display:
+                cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
-    ROIImage = orig.copy()[startY:endY, startX:endX]
-    config = '--psm 6' if args['numbers'] else ''
-    extracted_text.append(pytesseract.image_to_string(
-        ROIImage, config=config)
-    )
-    if args['display']:
-        cv2.imshow("SubImage", ROIImage)
+            ROIImage = orig.copy()[startY:endY, startX:endX]
+            config = '--psm 6' if numbers else ''
+            extracted_text.append(pytesseract.image_to_string(
+                ROIImage, config=config)
+            )
+            if display:
+                cv2.imshow("SubImage", ROIImage)
 
+        # show the output image
+        if display:
+            cv2.imshow("Text Detection", orig)
+            cv2.waitKey(0)
 
-# show the output image
-if args['display']:
-    cv2.imshow("Text Detection", orig)
-    cv2.waitKey(0)
-
-print('Extracted text')
-for text in extracted_text:
-    print(text)
+        return extracted_text
