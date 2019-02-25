@@ -2,12 +2,13 @@
 # python text_detection.py --image images/lebron_james.jpg --east frozen_east_text_detection.pb
 
 # import the necessary packages
-from imutils.object_detection import non_max_suppression
-import numpy as np
 import argparse
 import time
+
 import cv2
+import numpy as np
 import pytesseract
+from imutils.object_detection import non_max_suppression
 
 def get_boxes(numRows, numCols, confidence, min_boxes=1, max_iterations=20):
     iterations = 0
@@ -66,7 +67,7 @@ def get_boxes(numRows, numCols, confidence, min_boxes=1, max_iterations=20):
             return boxes
         else:
             confidence /= 2
-            print(f'Couldn\'t find at least {min_boxes} boxe(s), halving confidence to {confidence}'.
+            print('Couldn\'t find at least {min_boxes} boxe(s), halving confidence to {confidence}'.
                   format(min_boxes=min_boxes, confidence=confidence))
 
 # construct the argument parser and parse the arguments
