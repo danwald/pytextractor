@@ -33,7 +33,7 @@ class PyTextractor:
         start = time.time()
         boxes = self._get_boxes(numRows, numCols, confidence, geometry, scores)
         end = time.time()
-        print('Found {boxes} ROIs {seconds:.6f} seconds'.format(boxes=len(boxes),seconds=(end-start)))
+        print('Found {boxes} ROIs {seconds:.6f} seconds'.format(boxes=len(boxes), seconds=(end - start)))
 
         return self._extract_text(
             loaded_image, boxes, percentage, display, numbers, ratio_width, ratio_height
@@ -57,8 +57,9 @@ class PyTextractor:
     def _compute_scores_geometry(self, image, width, height):
         # construct a blob from the image and then perform a forward pass of
         # the model to obtain the two output layer sets
-        blob = cv2.dnn.blobFromImage(image, 1.0, (width, height),
-            (123.68, 116.78, 103.94), swapRB=True, crop=False)
+        blob = cv2.dnn.blobFromImage(
+            image, 1.0, (width, height), (123.68, 116.78, 103.94), swapRB=True, crop=False
+        )
         start = time.time()
         self.east_net.setInput(blob)
         (scores, geometry) = self.east_net.forward(self.layer_names)
@@ -68,14 +69,11 @@ class PyTextractor:
         print("[INFO] text detection took {:.6f} seconds".format(end - start))
         return (scores, geometry)
 
-
-
     def _load_assets(self):
         start = time.time()
         self.east_net = cv2.dnn.readNet(self.east)
         end = time.time()
-        print("[INFO] Loaded EAST text detector {:.6f} seconds ...".format(end-start))
-
+        print("[INFO] Loaded EAST text detector {:.6f} seconds ...".format(end - start))
 
     def _get_boxes(self, numRows, numCols, confidence, geometry, scores, min_boxes=1, max_iterations=20):
         iterations = 0
@@ -138,16 +136,15 @@ class PyTextractor:
                       format(min_boxes=min_boxes, confidence=confidence))
 
     def _extract_text(self, image, boxes, percent, display, numbers, ratio_width, ratio_height):
-        extracted_text=[]
+        extracted_text = []
         for (startX, startY, endX, endY) in boxes:
             # scale the bounding box coordinates based on the respective
             # ratios
-            percent = (percent/100+1) if percent >= 0 else ((100 - percent)/100)
+            percent = (percent / 100 + 1) if percent >= 0 else ((100 - percent) / 100)
             startX = int(startX * ratio_width * percent)
             startY = int(startY * ratio_height * percent)
             endX = int(endX * ratio_width * percent)
             endY = int(endY * ratio_height * percent)
-
 
             # draw the bounding box on the image
             if display:
