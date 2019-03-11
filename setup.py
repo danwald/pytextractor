@@ -21,6 +21,8 @@ setup(
     url='https://github.com/danwald/pytextractor/',
     packages=find_packages(),
     install_requires=requirements,
+    setup_requires=['pytest-runner',],
+    tests_require=['pytest',],
     license='MIT',
     include_package_data=True,
     classifiers=[
