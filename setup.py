@@ -22,6 +22,7 @@ setup(
     packages=find_packages(),
     install_requires=requirements,
     license='MIT',
+    include_package_data=True,
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
