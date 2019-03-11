@@ -4,10 +4,10 @@ with open('README.md', 'r') as readme_file:
     readme = readme_file.read()
 
 requirements = [
-	"imutils",
-	"opencv-python",
-	"pytesseract",
-	"Pillow",
+    'imutils==0.5.2',
+    'opencv-python==4.0.0.21',
+    'Pillow==5.4.1',
+    'pytesseract==0.2.6',
 ]
 
 setup(
@@ -21,13 +21,13 @@ setup(
     url='https://github.com/danwald/pytextractor/',
     packages=find_packages(),
     install_requires=requirements,
-	license='MIT',
+    license='MIT',
     classifiers=[
-		'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
-		'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: MIT License',
     ],
 )
