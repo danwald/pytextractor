@@ -21,10 +21,11 @@ setup(
     url='https://github.com/danwald/pytextractor/',
     packages=find_packages(),
     install_requires=requirements,
-    setup_requires=['pytest-runner',],
-    tests_require=['pytest',],
+    setup_requires=['pytest-runner', ],
+    tests_require=['pytest', ],
     license='MIT',
     include_package_data=True,
+    entry_points={'console_scripts': ['text_detector=text_detection:text_detector']},
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',

@@ -5,7 +5,8 @@ import sys
 
 from pytextractor.pytextractor import PyTextractor
 
-if __name__ == '__main__':
+
+def text_detector():
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser(description='Text/Number extractor from image')
     ap.add_argument('images', type=str, nargs='+', help='path(s) to input image(s)')
@@ -29,5 +30,7 @@ if __name__ == '__main__':
         for text in extractor.get_image_text(**kwargs):
             print(text)
     sys.exit(0)
-else:
-    sys.exit(1)
+
+
+if __name__ == '__main__':
+    text_detector()
