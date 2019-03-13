@@ -29,8 +29,8 @@ def text_detector():
         kwargs.update({'image': image})
         for text in extractor.get_image_text(**kwargs):
             print(text)
-    sys.exit(0)
+    return 0
 
 
 if __name__ == '__main__':
-    text_detector()
+    sys.exit(text_detector())
