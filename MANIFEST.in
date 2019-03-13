@@ -1,0 +1,2 @@
+include pytextractor/data/models/frozen_east_text.pb
+include tests/test_images/*
