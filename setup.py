@@ -12,7 +12,7 @@ requirements = [
 
 setup(
     name='pytextractor',
-    version='0.0.2',
+    version='0.0.3',
     author='danny crasto',
     author_email='danwald79@gmail.com',
     description='text extractor from images',
