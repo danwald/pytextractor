@@ -23,6 +23,8 @@ class PyTextractor:
                        numbers=False,
                        confidence=0.5,
                        percentage=2.0,
+                       min_boxes=2,
+                       max_iterations=20
                        **kwargs):
         loaded_image = self._load_image(image)
         image, width, height, ratio_width, ratio_height = self._resize_image(
@@ -32,7 +34,7 @@ class PyTextractor:
         (num_rows, num_cols) = scores.shape[2:4]
 
         start = time.time()
-        boxes = self._get_boxes(num_rows, num_cols, confidence, geometry, scores)
+        boxes = self._get_boxes(num_rows, num_cols, confidence, geometry, scores, min_boxes, max_iterations)
         end = time.time()
         print('Found {boxes} ROIs {seconds:.6f} seconds'.format(boxes=len(boxes), seconds=(end - start)))
 
@@ -77,7 +79,7 @@ class PyTextractor:
         end = time.time()
         print('[INFO] Loaded EAST text detector {:.6f} seconds ...'.format(end - start))
 
-    def _get_boxes(self, num_rows, num_cols, confidence, geometry, scores, min_boxes=1, max_iterations=20):
+    def _get_boxes(self, num_rows, num_cols, confidence, geometry, scores, min_boxes, max_iterations):
         iterations = 0
         boxes = []
         rects = []

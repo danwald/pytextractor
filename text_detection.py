@@ -23,9 +23,11 @@ def text_detector():
     ap.add_argument('-d', '--display', action='store_true', help='Display bounding boxes')
     ap.add_argument('-n', '--numbers', action='store_true', help='Detect only numbers')
     ap.add_argument('-p', '--percentage', type=float, default=2.0, help='Expand/shrink detected bound box')
+    ap.add_argument('-b', '--min-boxes', type=int, default=1, help='minimum number of detected boxes to return')
+    ap.add_argument('-i', '--max-iterations', type=int, default=20, help='max number of iterations finding min_boxes')
     kwargs = vars(ap.parse_args())
 
-    extractor = PyTextractor(east=kwargs['east'])
+    extractor = PyTextractor(**kwargs)
     images = kwargs.pop('images')
     for image in images:
         kwargs.update({'image': image})
