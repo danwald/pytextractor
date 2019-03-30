@@ -10,9 +10,9 @@ from imutils.object_detection import non_max_suppression
 class PyTextractor:
     layer_names = ('feature_fusion/Conv_7/Sigmoid', 'feature_fusion/concat_3',)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, east=None):
         pkg_east_model = resource_filename(__name__, 'data/frozen_east_text_detection.pb')
-        self.east = kwargs.get('east', pkg_east_model) or pkg_east_model
+        self.east = east or pkg_east_model
         self._load_assets()
 
     def get_image_text(self,
@@ -23,8 +23,8 @@ class PyTextractor:
                        numbers=False,
                        confidence=0.5,
                        percentage=2.0,
-                       min_boxes=2,
-                       max_iterations=20
+                       min_boxes=1,
+                       max_iterations=20,
                        **kwargs):
         loaded_image = self._load_image(image)
         image, width, height, ratio_width, ratio_height = self._resize_image(

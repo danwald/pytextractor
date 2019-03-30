@@ -32,12 +32,10 @@ def text_detector():
         help='max number of iterations finding min_boxes')
 
     kwargs = vars(ap.parse_args())
-
-    extractor = PyTextractor(kwargs)
     images = kwargs.pop('images')
+    extractor = PyTextractor(kwargs.pop('east'))
     for image in images:
-        kwargs.update({'image': image})
-        for text in extractor.get_image_text(**kwargs):
+        for text in extractor.get_image_text(image, **kwargs):
             print(text)
     return 0
 
