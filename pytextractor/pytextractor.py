@@ -1,4 +1,5 @@
 import time
+from pkg_resources import resource_filename
 
 import cv2
 import numpy as np
@@ -10,7 +11,8 @@ class PyTextractor:
     layer_names = ('feature_fusion/Conv_7/Sigmoid', 'feature_fusion/concat_3',)
 
     def __init__(self, *args, **kwargs):
-        self.east = kwargs.get('east', './assets/models/frozen_east_text_detection.pb')
+        pkg_east_model = resource_filename(__name__, 'data/frozen_east_text_detection.pb')
+        self.east = kwargs.get('east', pkg_east_model) or pkg_east_model
         self._load_assets()
 
     def get_image_text(self,
@@ -47,6 +49,7 @@ class PyTextractor:
         (newW, newH) = (width, height)
         ratio_width = W / float(newW)
         ratio_height = H / float(newH)
+
 
         # resize the image and grab the new image dimensions
         resized_image = cv2.resize(image, (newW, newH))

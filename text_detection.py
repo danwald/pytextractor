@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from pkg_resources import resource_string
 import argparse
 import sys
 
@@ -12,8 +13,9 @@ def text_detector():
     ap.add_argument('images', type=str, nargs='+', help='path(s) to input image(s)')
     ap.add_argument(
         '-east', '--east',
-        type=str, default='./assets/models/frozen_east_text_detection.pb',
-        help='path to input EAST text detector'
+        type=str,
+        help='path to input EAST text detector',
+        required=False,
     )
     ap.add_argument('-c', '--confidence', type=float, default=0.5, help='minimum probability required to inspect a region')
     ap.add_argument('-w', '--width', type=int, default=320, help='resized image width (should be multiple of 32)')
