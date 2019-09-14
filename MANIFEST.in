@@ -1,2 +1,2 @@
-include pytextractor/data/models/frozen_east_text.pb
+exclude pytextractor/data/frozen_east_text_detection.pb
 include tests/test_images/*

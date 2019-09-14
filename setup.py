@@ -29,7 +29,6 @@ setup(
     tests_require=['pytest', ],
     license='MIT',
     include_package_data=True,
-    exclude_package_data={'': ['*.pb']},
     entry_points={'console_scripts': ['text_detector=pytextractor.text_detection:text_detector']},
     classifiers=[
         'License :: OSI Approved :: MIT License',
