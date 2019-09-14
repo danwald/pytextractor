@@ -83,12 +83,13 @@ class PyTextractor:
         print('[INFO] Loaded EAST text detector {:.6f} seconds ...'.format(end - start))
 
     def _get_east(self):
-        if self.east_net:
+        if os.path.exists(self.east):
             return
 
         pkg_path = os.path.dirname(__file__)
-        data_file = os.path.join(pkg_path, 'data/frozen_east_text_detection.pb')
-        print('Writing east to {}'.format(data_file))
+        data_file = os.path.join(pkg_path, self.east)
+        os.makedirs(os.path.dirname(data_file))
+        print('Downloading east data file  to {}'.format(data_file))
         with open(data_file, 'wb') as fp:
             with requests.get('https://tinyurl.com/yxdd7kb5', stream=True) as response:
                 for chunk in response.iter_content(chunk_size=2048):
