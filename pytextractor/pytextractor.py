@@ -1,6 +1,8 @@
 import time
+import os
 from pkg_resources import resource_filename
 
+import requests
 import cv2
 import numpy as np
 import pytesseract
@@ -74,10 +76,23 @@ class PyTextractor:
         return (scores, geometry)
 
     def _load_assets(self):
+        self._get_east()
         start = time.time()
         self.east_net = cv2.dnn.readNet(self.east)
         end = time.time()
         print('[INFO] Loaded EAST text detector {:.6f} seconds ...'.format(end - start))
+
+    def _get_east(self):
+        if self.east_net:
+            return
+
+        pkg_path = os.path.dirname(__file__)
+        data_file = os.path.join(pkg_path, 'data/frozen_east_text_detection.pb')
+        print('Writing east to {}'.format(data_file))
+        with open(data_file, 'wb') as fp:
+            with requests.get('https://tinyurl.com/yxdd7kb5', stream=True) as response:
+                for chunk in response.iter_content(chunk_size=2048):
+                    fp.write(chunk)
 
     def _get_boxes(self, num_rows, num_cols, confidence, geometry, scores, min_boxes, max_iterations):
         iterations = 0
