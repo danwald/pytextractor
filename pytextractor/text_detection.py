@@ -4,7 +4,7 @@ from pkg_resources import resource_string
 import argparse
 import sys
 
-from pytextractor.pytextractor import PyTextractor
+from pytextractor import PyTextractor
 
 
 def text_detector():
