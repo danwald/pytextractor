@@ -16,7 +16,7 @@ requirements = [
 
 setup(
     name='pytextractor',
-    version='0.3',
+    version='0.4',
     author='danny crasto',
     author_email='danwald79@gmail.com',
     description='text extractor from images',
@@ -25,7 +25,7 @@ setup(
     url='https://github.com/danwald/pytextractor/', packages=find_packages(),
     install_requires=requirements,
     use_scm_version = True,
-    setup_requires=['pytest-runner', 'setuptools_scm', 'requests'],
+    setup_requires=['pytest-runner', 'setuptools_scm',],
     tests_require=['pytest', ],
     license='MIT',
     include_package_data=True,
