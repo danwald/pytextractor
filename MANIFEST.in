@@ -1,2 +1,2 @@
-exclude pytextractor/data/frozen_east_text_detection.pb
-include tests/test_images/*
+graft tests/test_images
+prune pytextractor/data
