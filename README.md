@@ -3,6 +3,7 @@ python ocr using tesseract/ with EAST opencv text detector
 
 Uses the EAST opencv detector defined [here](https://www.pyimagesearch.com/2018/08/20/opencv-text-detection-east-text-detector/) with [pytesseract](https://github.com/madmaze/pytesseract) to extract text(default) or numbers from images.
 
+### Usage main
 ```
 usage: text_detection.py [-h] [--east EAST] [-c CONFIDENCE] [-w WIDTH]
                          [-e HEIGHT] [-d] [-n] [-p PERCENTAGE] [-b MIN_BOXES]
@@ -31,4 +32,12 @@ optional arguments:
                         minimum number of detected boxes to return
   -i MAX_ITERATIONS, --max-iterations MAX_ITERATIONS
                         max number of iterations finding min_boxes
+```
+
+### Usage lib
+
+```
+from pytextractor import pytextractor
+
+extractor = pytextractor.PyTextractor()
 ```
