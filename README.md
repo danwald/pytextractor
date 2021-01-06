@@ -41,3 +41,15 @@ from pytextractor import pytextractor
 
 extractor = pytextractor.PyTextractor()
 ```
+
+### Running tests
+
+```
+python setup.py test
+```
+
+* make sure tesseract is installed *
+
+```
+brew | apt-get install tesseract
+```
