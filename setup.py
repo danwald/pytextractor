@@ -6,17 +6,17 @@ with open('README.md', 'r') as readme_file:
     readme = readme_file.read()
 
 requirements = [
-    'imutils==0.5.2',
-    'opencv-python==4.1.1.26',
-    'Pillow==6.2.2',
-    'pytesseract==0.2.6',
-    'requests==2.22.0',
+    'imutils==0.5.3',
+    'opencv-python==4.4.0.46',
+    'Pillow==8.1.0',
+    'pytesseract==0.3.7',
+    'requests==2.25.1',
 ]
 
 
 setup(
     name='pytextractor',
-    version='0.6',
+    version='1.0.0',
     author='danny crasto',
     author_email='danwald79@gmail.com',
     description='text extractor from images',
