@@ -8,7 +8,7 @@ with open('README.md', 'r') as readme_file:
 requirements = [
     'imutils==0.5.3',
     'opencv-python==4.4.0.46',
-    'Pillow==8.1.0',
+    'Pillow==8.2.0',
     'pytesseract==0.3.7',
     'requests==2.25.1',
 ]
