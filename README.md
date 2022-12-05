@@ -45,7 +45,8 @@ extractor = pytextractor.PyTextractor()
 ### Running tests
 
 ```
-python setup.py test
+pip install .[dev]
+pytest -s tests
 ```
 
 * make sure tesseract is installed *
