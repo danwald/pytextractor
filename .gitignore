@@ -109,3 +109,6 @@ venv.bak/
 Session.vim
 .notags
 tags
+
+#venv
+bin
