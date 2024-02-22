@@ -12,12 +12,7 @@ requirements = (
 )
 
 dev_requirements = (
-    'pip',
-    'wheel',
-    'ipdb',
     'pytest',
-    'twine',
-    'pytest-cov',
 )
 
 setup(
