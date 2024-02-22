@@ -4,20 +4,20 @@ with open('README.md', 'r') as readme_file:
     readme = readme_file.read()
 
 requirements = (
-    'imutils>=0.5.4',
-    'opencv-python>=4.5.3.56',
-    'Pillow>=9.3.0',
-    'pytesseract>=0.3.7',
-    'requests>=2.26.0',
+    'imutils',
+    'opencv-python',
+    'Pillow',
+    'pytesseract',
+    'requests',
 )
 
 dev_requirements = (
-    'pip>=22.0.4',
-    'wheel>=0.33.1',
-    'ipdb>=0.13.9',
-    'pytest>=4.3.0',
-    'twine>=1.13.0',
-    'pytest-cov>=2.6.1',
+    'pip',
+    'wheel',
+    'ipdb',
+    'pytest',
+    'twine',
+    'pytest-cov',
 )
 
 setup(
