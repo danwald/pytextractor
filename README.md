@@ -1,21 +1,20 @@
 # pytextractor
-python ocr using tesseract/ with EAST opencv text detector
+python ocr using tesseract with EAST opencv text detector
 
-Uses the EAST opencv detector defined [here](https://www.pyimagesearch.com/2018/08/20/opencv-text-detection-east-text-detector/) with [pytesseract](https://github.com/madmaze/pytesseract) to extract text(default) or numbers from images.
+Uses the [EAST opencv detector](https://www.pyimagesearch.com/2018/08/20/opencv-text-detection-east-text-detector/) with [pytesseract](https://github.com/madmaze/pytesseract) to extract text(default) or numbers from images.
 
 ### Usage main
 ```
-usage: text_detection.py [-h] [--east EAST] [-c CONFIDENCE] [-w WIDTH]
-                         [-e HEIGHT] [-d] [-n] [-p PERCENTAGE] [-b MIN_BOXES]
-                         [-i MAX_ITERATIONS]
-                         images [images ...]
+usage: text_detector [-h] [--east EAST] [-c CONFIDENCE] [-w WIDTH] [-e HEIGHT] [-d] [-n] [-p PERCENTAGE]
+                     [-b MIN_BOXES] [-i MAX_ITERATIONS]
+                     images [images ...]
 
 Text/Number extractor from image
 
 positional arguments:
   images                path(s) to input image(s)
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --east EAST           path to input EAST text detector
   -c CONFIDENCE, --confidence CONFIDENCE
@@ -31,7 +30,15 @@ optional arguments:
   -b MIN_BOXES, --min-boxes MIN_BOXES
                         minimum number of detected boxes to return
   -i MAX_ITERATIONS, --max-iterations MAX_ITERATIONS
-                        max number of iterations finding min_boxes
+
+```
+
+### Installation & usage
+
+```
+brew install tesseract
+pipx install pytextractor
+text_detector
 ```
 
 ### Usage lib
@@ -45,12 +52,9 @@ extractor = pytextractor.PyTextractor()
 ### Running tests
 
 ```
-pip install .[dev]
+brew install tesseract
+python -mvenv .venv --prompt .
+. ./.venv/bin/activate
+pip install ".[dev]"
 pytest -s tests
-```
-
-* make sure tesseract is installed *
-
-```
-brew | apt-get install tesseract
 ```

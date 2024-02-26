@@ -4,25 +4,20 @@ with open('README.md', 'r') as readme_file:
     readme = readme_file.read()
 
 requirements = (
-    'imutils>=0.5.4',
-    'opencv-python>=4.5.3.56',
-    'Pillow>=9.3.0',
-    'pytesseract>=0.3.7',
-    'requests>=2.26.0',
+    'imutils',
+    'opencv-python',
+    'Pillow',
+    'pytesseract',
+    'requests',
 )
 
 dev_requirements = (
-    'pip>=22.0.4',
-    'wheel>=0.33.1',
-    'ipdb>=0.13.9',
-    'pytest>=4.3.0',
-    'twine>=1.13.0',
-    'pytest-cov>=2.6.1',
+    'pytest',
 )
 
 setup(
     name='pytextractor',
-    version='1.1.0',
+    version='2.0.0',
     author='danny crasto',
     author_email='danwald79@gmail.com',
     description='text extractor from images',
@@ -44,6 +39,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'License :: OSI Approved :: MIT License',
     ],
 )
