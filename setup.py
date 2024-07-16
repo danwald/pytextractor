@@ -9,6 +9,7 @@ requirements = (
     'Pillow',
     'pytesseract',
     'requests',
+    'setuptools',
 )
 
 dev_requirements = (
@@ -17,7 +18,7 @@ dev_requirements = (
 
 setup(
     name='pytextractor',
-    version='2.0.0',
+    version='2.1.0',
     author='danny crasto',
     author_email='danwald79@gmail.com',
     description='text extractor from images',
@@ -26,10 +27,10 @@ setup(
     url='https://github.com/danwald/pytextractor/',
     packages=find_packages(),
     install_requires=requirements,
+    tests_require=dev_requirements,
     extras_require={"dev": dev_requirements},
     use_scm_version=True,
     setup_requires=['pytest-runner', 'setuptools_scm', ],
-    tests_require=['pytest', ],
     license='MIT',
     include_package_data=False,
     entry_points={'console_scripts': ['text_detector=pytextractor.text_detection:text_detector']},
@@ -40,6 +41,7 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'License :: OSI Approved :: MIT License',
     ],
 )
