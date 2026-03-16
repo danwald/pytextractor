@@ -1,6 +1,6 @@
 import time
 import os
-from pkg_resources import resource_filename
+from pathlib import Path
 
 import requests
 import cv2
@@ -13,7 +13,7 @@ class PyTextractor:
     layer_names = ('feature_fusion/Conv_7/Sigmoid', 'feature_fusion/concat_3',)
 
     def __init__(self, east=None):
-        pkg_east_model = resource_filename(__name__, 'data/frozen_east_text_detection.pb')
+        pkg_east_model = str(Path(__file__).parent / 'data' / 'frozen_east_text_detection.pb')
         self.east = east or pkg_east_model
         self._load_assets()
 

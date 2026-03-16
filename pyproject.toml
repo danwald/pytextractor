@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pytextractor"
+dynamic = ["version"]
+description = "text extractor from images"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "danny crasto", email = "danwald79@gmail.com" }]
+requires-python = ">=3.13"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "imutils",
+    "opencv-python<4.11",
+    "Pillow",
+    "pytesseract",
+    "requests",
+    "setuptools",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[project.scripts]
+text_detector = "pytextractor.text_detection:text_detector"
+
+[project.urls]
+Homepage = "https://github.com/danwald/pytextractor/"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools_scm]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
