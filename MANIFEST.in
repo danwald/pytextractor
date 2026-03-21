@@ -1,2 +1,0 @@
-graft tests/test_images
-prune pytextractor/data

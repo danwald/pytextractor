@@ -1,9 +1,15 @@
 import re
-
-from pkg_resources import resource_filename
+import os
 
 import pytest
 from pytextractor.pytextractor import PyTextractor
+
+_HERE = os.path.dirname(__file__)
+
+
+def resource_filename(package, path):
+    return os.path.join(_HERE, path)
+
 
 class TestDetector(object):
     def setup_method(self, method):
