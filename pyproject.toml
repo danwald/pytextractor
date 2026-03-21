@@ -7,12 +7,12 @@ license = { text = "MIT" }
 authors = [{ name = "danny crasto", email = "danwald79@gmail.com" }]
 requires-python = ">=3.12"
 dependencies = [
-    "imutils>=0.5.4",
-    "opencv-python>=4.13.0.92",
-    "pillow>=12.1.1",
-    "pytesseract>=0.3.13",
-    "requests>=2.32.5",
-    "setuptools>=82.0.1",
+    "imutils",
+    "opencv-python",
+    "pillow",
+    "pytesseract",
+    "requests",
+    "setuptools",
 ]
 
 [project.scripts]
@@ -30,7 +30,7 @@ testpaths = ["tests"]
 
 [dependency-groups]
 dev = [
-    "pytest>=9.0.2",
+    "pytest",
 ]
 
 [project.optional-dependencies]
