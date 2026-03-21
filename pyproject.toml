@@ -1,0 +1,37 @@
+[project]
+name = "pytextractor"
+version = "2.1.0"
+description = "text extractor from images"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "danny crasto", email = "danwald79@gmail.com" }]
+requires-python = ">=3.12"
+dependencies = [
+    "imutils>=0.5.4",
+    "opencv-python>=4.13.0.92",
+    "pillow>=12.1.1",
+    "pytesseract>=0.3.13",
+    "requests>=2.32.5",
+    "setuptools>=82.0.1",
+]
+
+[project.scripts]
+text_detector = "pytextractor.text_detection:text_detector"
+
+[project.urls]
+Homepage = "https://github.com/danwald/pytextractor/"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
+
+[project.optional-dependencies]
+dev = []
