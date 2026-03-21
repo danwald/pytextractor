@@ -37,7 +37,7 @@ options:
 
 ```
 brew install tesseract
-pipx install pytextractor
+uv add pytextractor
 text_detector
 ```
 
@@ -53,8 +53,13 @@ extractor = pytextractor.PyTextractor()
 
 ```
 brew install tesseract
-python -mvenv .venv --prompt .
-. ./.venv/bin/activate
-pip install ".[dev]"
-pytest -s tests
+uv run pytest
+```
+
+### Development setup
+
+```
+brew install tesseract
+uv sync
+uv run pytest
 ```
