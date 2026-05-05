@@ -1,6 +1,6 @@
 [project]
 name = "pytextractor"
-version = "2.2.2"
+version = "2.2.3"
 description = "text extractor from images"
 readme = "README.md"
 license = { text = "MIT" }
