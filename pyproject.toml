@@ -32,6 +32,7 @@ testpaths = ["tests"]
 dev = [
     "pytest",
     "ruff",
+    "ty",
 ]
 
 [tool.ruff]
