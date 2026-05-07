@@ -1,5 +1,6 @@
 import os
 import re
+import subprocess
 
 import pytest
 
@@ -62,3 +63,14 @@ class TestDetector:
                 pass
         else:
             raise AssertionError("No ROI detected")
+
+
+def test_cli_help():
+    """Test that the CLI --help flag works."""
+    result = subprocess.run(
+        ["python", "-m", "pytextractor.text_detection", "--help"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert "Text/Number extractor from image" in result.stdout
