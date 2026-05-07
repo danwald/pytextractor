@@ -112,3 +112,4 @@ tags
 
 #venv
 bin
+.claude/worktrees/
