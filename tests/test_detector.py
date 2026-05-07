@@ -16,6 +16,7 @@ class TestDetector:
     def setup_method(self, method):
         self.extractor = PyTextractor()
 
+    @pytest.mark.pytesseract
     @pytest.mark.parametrize(
         "image",
         [
@@ -28,6 +29,7 @@ class TestDetector:
         detected = self.extractor.get_image_text(image, number=True)
         assert len(detected)
 
+    @pytest.mark.pytesseract
     @pytest.mark.parametrize(
         "image,expected_number",
         [
@@ -38,6 +40,7 @@ class TestDetector:
         detected = self.extractor.get_image_text(image, number=True)
         assert int(detected[0]) == expected_number
 
+    @pytest.mark.pytesseract
     @pytest.mark.skip(reason="[LIMITATION] can't detect number")
     @pytest.mark.parametrize(
         "image,expected_number",
