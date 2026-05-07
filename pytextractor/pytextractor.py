@@ -1,47 +1,48 @@
-import time
 import os
+import time
 
-import requests
 import cv2
 import numpy as np
 import pytesseract
+import requests
 from imutils.object_detection import non_max_suppression
 
 
 class PyTextractor:
-    layer_names = ('feature_fusion/Conv_7/Sigmoid', 'feature_fusion/concat_3',)
+    layer_names = (
+        "feature_fusion/Conv_7/Sigmoid",
+        "feature_fusion/concat_3",
+    )
 
     def __init__(self, east=None):
-        pkg_east_model = os.path.join(os.path.dirname(__file__), 'data', 'frozen_east_text_detection.pb')
+        pkg_east_model = os.path.join(os.path.dirname(__file__), "data", "frozen_east_text_detection.pb")
         self.east = east or pkg_east_model
         self._load_assets()
 
-    def get_image_text(self,
-                       image,
-                       width=320,
-                       height=320,
-                       display=False,
-                       numbers=False,
-                       confidence=0.5,
-                       percentage=2.0,
-                       min_boxes=1,
-                       max_iterations=20,
-                       **kwargs):
+    def get_image_text(
+        self,
+        image,
+        width=320,
+        height=320,
+        display=False,
+        numbers=False,
+        confidence=0.5,
+        percentage=2.0,
+        min_boxes=1,
+        max_iterations=20,
+        **kwargs,
+    ):
         loaded_image = self._load_image(image)
-        image, width, height, ratio_width, ratio_height = self._resize_image(
-            loaded_image, width, height
-        )
+        image, width, height, ratio_width, ratio_height = self._resize_image(loaded_image, width, height)
         scores, geometry = self._compute_scores_geometry(image, width, height)
         (num_rows, num_cols) = scores.shape[2:4]
 
         start = time.time()
         boxes = self._get_boxes(num_rows, num_cols, confidence, geometry, scores, min_boxes, max_iterations)
         end = time.time()
-        print('Found {boxes} ROIs {seconds:.6f} seconds'.format(boxes=len(boxes), seconds=(end - start)))
+        print(f"Found {len(boxes)} ROIs {end - start:.6f} seconds")
 
-        return self._extract_text(
-            loaded_image, boxes, percentage, display, numbers, ratio_width, ratio_height
-        )
+        return self._extract_text(loaded_image, boxes, percentage, display, numbers, ratio_width, ratio_height)
 
     def _load_image(self, image):
         return cv2.imread(image)
@@ -53,7 +54,6 @@ class PyTextractor:
         ratio_width = W / float(newW)
         ratio_height = H / float(newH)
 
-
         # resize the image and grab the new image dimensions
         resized_image = cv2.resize(image, (newW, newH))
         (H, W) = resized_image.shape[:2]
@@ -62,16 +62,14 @@ class PyTextractor:
     def _compute_scores_geometry(self, image, width, height):
         # construct a blob from the image and then perform a forward pass of
         # the model to obtain the two output layer sets
-        blob = cv2.dnn.blobFromImage(
-            image, 1.0, (width, height), (123.68, 116.78, 103.94), swapRB=True, crop=False
-        )
+        blob = cv2.dnn.blobFromImage(image, 1.0, (width, height), (123.68, 116.78, 103.94), swapRB=True, crop=False)
         start = time.time()
         self.east_net.setInput(blob)
         (scores, geometry) = self.east_net.forward(self.layer_names)
         end = time.time()
 
         # show timing information on text prediction
-        print('[INFO] text detection took {:.6f} seconds'.format(end - start))
+        print(f"[INFO] text detection took {end - start:.6f} seconds")
         return (scores, geometry)
 
     def _load_assets(self):
@@ -79,7 +77,7 @@ class PyTextractor:
         start = time.time()
         self.east_net = cv2.dnn.readNet(self.east)
         end = time.time()
-        print('[INFO] Loaded EAST text detector {:.6f} seconds ...'.format(end - start))
+        print(f"[INFO] Loaded EAST text detector {end - start:.6f} seconds ...")
 
     def _get_east(self):
         if os.path.exists(self.east):
@@ -88,9 +86,9 @@ class PyTextractor:
         pkg_path = os.path.dirname(__file__)
         data_file = os.path.join(pkg_path, self.east)
         os.makedirs(os.path.dirname(data_file))
-        print('Downloading east data file  to {}'.format(data_file))
-        with open(data_file, 'wb') as fp:
-            with requests.get('https://tinyurl.com/yxdd7kb5', stream=True) as response:
+        print(f"Downloading east data file  to {data_file}")
+        with open(data_file, "wb") as fp:
+            with requests.get("https://tinyurl.com/yxdd7kb5", stream=True) as response:
                 for chunk in response.iter_content(chunk_size=2048):
                     fp.write(chunk)
 
@@ -99,7 +97,7 @@ class PyTextractor:
         boxes = []
         rects = []
         confidences = []
-        while(iterations < max_iterations):
+        while iterations < max_iterations:
             for y in range(0, num_rows):
                 # extract the scores (probabilities), followed by the geometrical
                 # data used to derive potential bounding box coordinates that
@@ -151,12 +149,11 @@ class PyTextractor:
                 return boxes
             else:
                 confidence /= 2
-                print('Couldn\'t find at least {min_boxes} boxe(s), halving confidence to {confidence}'.
-                      format(min_boxes=min_boxes, confidence=confidence))
+                print(f"Couldn't find at least {min_boxes} boxe(s), halving confidence to {confidence}")
 
     def _extract_text(self, image, boxes, percent, display, numbers, ratio_width, ratio_height):
         extracted_text = []
-        for (start_X, start_Y, end_X, end_Y) in boxes:
+        for start_X, start_Y, end_X, end_Y in boxes:
             # scale the bounding box coordinates based on the respective
             # ratios
             percent = (percent / 100 + 1) if percent >= 0 else ((100 - percent) / 100)
@@ -170,16 +167,14 @@ class PyTextractor:
                 cv2.rectangle(image, (start_X, start_Y), (end_X, end_Y), (0, 255, 0), 2)
 
             ROIImage = image.copy()[start_Y:end_Y, start_X:end_X]
-            config = '--psm 6' if numbers else ''
-            extracted_text.append(pytesseract.image_to_string(
-                ROIImage, config=config)
-            )
+            config = "--psm 6" if numbers else ""
+            extracted_text.append(pytesseract.image_to_string(ROIImage, config=config))
             if display:
-                cv2.imshow('SubImage', ROIImage)
+                cv2.imshow("SubImage", ROIImage)
 
         # show the output image
         if display:
-            cv2.imshow('Text Detection', image)
+            cv2.imshow("Text Detection", image)
             cv2.waitKey(0)
 
         return extracted_text
