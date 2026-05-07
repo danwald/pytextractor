@@ -27,6 +27,9 @@ build-backend = "hatchling.build"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "pytesseract: tests that require pytesseract/tesseract binary",
+]
 
 [dependency-groups]
 dev = [
