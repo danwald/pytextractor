@@ -3,7 +3,7 @@
 import argparse
 import sys
 
-from .pytextractor import PyTextractor
+from pytextractor import PyTextractor
 
 
 def text_detector():
