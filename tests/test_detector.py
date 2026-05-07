@@ -48,9 +48,7 @@ class TestDetector:
         ],
     )
     def test_number_extractor_tweaked(self, image, expected_number):
-        detected = self.extractor.get_image_text(
-            image, number=True, percentage=4, min_boxes=2
-        )
+        detected = self.extractor.get_image_text(image, number=True, percentage=4, min_boxes=2)
         for roi in detected:
             try:
                 print(roi, " ? ", expected_number)
