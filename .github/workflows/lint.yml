@@ -1,4 +1,4 @@
-name: Lint with Ruff
+name: Lint & Type Check
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  ruff:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,3 +23,5 @@ jobs:
         run: uv run ruff check pytextractor/ tests/
       - name: Run Ruff format check
         run: uv run ruff format --check pytextractor/ tests/
+      - name: Run type checking with ty
+        run: uv run ty check
