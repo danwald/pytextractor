@@ -11,6 +11,9 @@ jobs:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Approve and merge
         run: |
           gh pr review --approve "${{ github.event.pull_request.number }}"
